@@ -235,7 +235,7 @@ branchAngle: 用来控制树枝之间的角度。
 
 ####Step5.使树枝晃动起来
 
-为了使树枝有摇晃的效果，我们只需要改变树枝之间的角度branchAngle就可以了。我需要在Tree的构造函数中增加两个新属性：```oBranchAngle```用来记录初始角度；```branchAngleFactor```用来控制角度随时间变化的变化量。  
+为了使树枝有摇晃的效果，我们只需要改变树枝之间的角度branchAngle就可以了。我需要在Tree的构造函数中增加三个新属性：```oBranchAngle```用来记录初始角度；```branchAngleFactor```用来控制角度随时间变化的变化量；```swingAngle```:随时间增加用来记录摇动的角度。  
 同时修改下drawRoot函数使其不用接受参数。调用更加方便。
 
 ```javascript
@@ -244,6 +244,7 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
 	this.branchAngle = 20;
 	this.oBranchAngle = this.branchAngle;
 	this.branchAngleFactor = 5;
+	this.swingAngle = 0;
 	......
 	this.drawRoot();
 }
@@ -272,13 +273,13 @@ Tree.prototype.drawRoot = function(){
   }
 ```
 
-增加循环函数，在循环函数中重绘整个树，并且每次重绘都要修改branchAngle值，使大树摇动起来。这里使用```Math.sin(time/1000)```可以在1秒值内获得一个-1至1之间的变化值。```atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;```乘以系数并加在原角度上。
+增加循环函数，在循环函数中重绘整个树，并且每次重绘都要修改branchAngle值，使大树摇动起来。```atree.swingAngle++;```使摇动角度随时间变化。这里使用```Math.sin(atree.swingAngle*(Math.PI/180))```可以在1秒值内获得一个-1至1之间的变化值。```atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;```乘以系数并加在原角度上。
 
 
 ```javascript
 function loop(time){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;
+    atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
     atree.drawRoot()
     requestAnimFrame(loop);
   }

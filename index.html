@@ -45,6 +45,7 @@
         this.branchAngle = 20;
         this.oBranchAngle = this.branchAngle;
         this.branchAngleFactor = 5;
+        this.swingAngle = 0;
         this.depth = depth || 5;
         var depth = depth || 5;
         this.drawRoot();
@@ -96,11 +97,13 @@
       var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
       function loop(time){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;
+        atree.swingAngle++;
+        atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
         atree.drawRoot();
         requestAnimFrame(loop);
       }
       loop(0);
+      
     </script>
   </body>
 </html>
