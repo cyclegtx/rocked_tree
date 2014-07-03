@@ -3,8 +3,9 @@
 根据工作的需要，制作一个摆动的树做为页面的背景。为了增加页面的交互性，我又为背景中的树增加了鼠标（触控）事件，使他能够根据鼠标（触控）做出相应的动作。先看看最终效果。
 ![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
 
-####Step1.完成HTML页面，新建一个Tree类
-	完成HTML页面后新建一个Tree类用来记录树的各个属性。其中```x,y```为树根部的坐标值，```branchLen,branchWidth```分别是树枝的长度与宽度，```depth```为树枝的层数，```canvas```用来接页面中的canvas元素（默认是ID为canvas的元素）。
+####Step1.完成HTML页面，新建一个Tree类  
+
+完成HTML页面后新建一个Tree类用来记录树的各个属性。其中```x,y```为树根部的坐标值，```branchLen,branchWidth```分别是树枝的长度与宽度，```depth```为树枝的层数，```canvas```用来接页面中的canvas元素（默认是ID为canvas的元素）。
 ```javascript
 function Tree(x,y,branchLen,branchWidth,depth,canvas){
 	this.canvas = canvas || document.getElementById('canvas');
