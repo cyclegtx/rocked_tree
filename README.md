@@ -52,6 +52,51 @@ Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth){
 }
 var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
 ```
-运行代码：
-![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/2.jpg)  
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/2.jpg)   
+<a href="https://github.com/cyclegtx/rocked_tree/tree/dba5140fd14365d228147e936d97573364ab23fa" target="_blank">点击查看历史代码</a>
 
+####Step3.添加drawBranch方法，用来绘制树枝  
+drawBranch同样是根据初始与结束坐标画出一条直线代表树枝。与树干不同的是树枝不再是垂直与地面而是与树干保持一定的角度。所以在drawBranch中我们加入新参数```angle```用来表示树枝与树干的垂直夹角α，这样就可以根据α算出toX与toY。请看图。  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/3-1.jpg)   
+这样我们在画完树干后再分别画两个不同角度的树枝，一个是```30°```一个```-30°```。并将传给树枝的宽度branchWidth减小一个像素，使其与树干粗细不同。
+
+```javascript
+Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth){
+	var toX = x;
+	var toY = y-branchLen;
+	this.ctx.save();
+	this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+	this.ctx.beginPath();
+	this.ctx.lineCap = "butt";
+	this.ctx.lineJoin="round";
+	this.ctx.lineWidth = branchWidth;
+	this.ctx.moveTo(x,y);
+	this.ctx.lineTo(toX,toY);
+	this.ctx.closePath();
+	this.ctx.stroke();
+	this.ctx.restore();
+	this.drawBranch(toX,toY,branchLen,branchWidth-1,30);
+	this.drawBranch(toX,toY,branchLen,branchWidth-1,-30);
+}
+Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle){
+	var angle = angle || 0;
+	var radian = (90-angle)*(Math.PI/180);
+	var toX = x+Math.cos(radian)*branchLen;
+	var toY = y-Math.sin(radian)*branchLen;
+	this.ctx.save();
+	this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+	this.ctx.beginPath();
+	this.ctx.lineCap = "butt";
+	this.ctx.lineJoin="round";
+	this.ctx.lineWidth = branchWidth;
+	this.ctx.moveTo(x,y);
+	this.ctx.lineTo(toX,toY);
+	this.ctx.closePath();
+	this.ctx.stroke();
+	this.ctx.restore();
+}
+```
+
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/3.jpg) 

@@ -57,6 +57,25 @@
         this.ctx.closePath();
         this.ctx.stroke();
         this.ctx.restore();
+        this.drawBranch(toX,toY,branchLen,branchWidth-1,30);
+        this.drawBranch(toX,toY,branchLen,branchWidth-1,-30);
+      }
+      Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle){
+        var angle = angle || 0;
+        var radian = (90-angle)*(Math.PI/180);
+        var toX = x+Math.cos(radian)*branchLen;
+        var toY = y-Math.sin(radian)*branchLen;
+        this.ctx.save();
+        this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+        this.ctx.beginPath();
+        this.ctx.lineCap = "butt";
+        this.ctx.lineJoin="round";
+        this.ctx.lineWidth = branchWidth;
+        this.ctx.moveTo(x,y);
+        this.ctx.lineTo(toX,toY);
+        this.ctx.closePath();
+        this.ctx.stroke();
+        this.ctx.restore();
       }
       var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
     </script>
