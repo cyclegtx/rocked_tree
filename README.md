@@ -179,9 +179,9 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
 ```  
 
 
-```branchLenFactor```:画每一层树枝的时候乘在branchLen上面，用来控制树枝长度。
-```rootLenFactor```:画树根的时候乘在branchLen上面，用来控制树根长度。
-```branchAngle```: 用来控制树枝之间的角度。   
+branchLenFactor:画每一层树枝的时候乘在branchLen上面，用来控制树枝长度。
+rootLenFactor:画树根的时候乘在branchLen上面，用来控制树根长度。
+branchAngle: 用来控制树枝之间的角度。   
 
 
 ```javascript
@@ -231,3 +231,59 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
 ```  
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/4-2.jpg)    
+<a href="https://github.com/cyclegtx/rocked_tree/tree/a450d7faedbc6dfff2f78773ce2c8299a971178b" target="_blank">点击查看历史代码</a>  
+
+####Step5.使树枝晃动起来
+
+为了使树枝有摇晃的效果，我们只需要改变树枝之间的角度branchAngle就可以了。我需要在Tree的构造函数中增加两个新属性：```oBranchAngle```用来记录初始角度；```branchAngleFactor```用来控制角度随时间变化的变化量。  
+同时修改下drawRoot函数使其不用接受参数。调用更加方便。
+
+```javascript
+function Tree(x,y,branchLen,branchWidth,depth,canvas){
+	......
+	this.branchAngle = 20;
+	this.oBranchAngle = this.branchAngle;
+	this.branchAngleFactor = 5;
+	......
+	this.drawRoot();
+}
+
+Tree.prototype.drawRoot = function(){
+    var x = this.x,y=this.y,branchLen = this.branchLen,depth = this.depth,branchWidth = this.branchWidth;
+    var toX = x;
+    var toY = y-branchLen*this.rootLenFactor;
+    var depth = depth||5;
+    this.ctx.save();
+    this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+    this.ctx.beginPath();
+    this.ctx.lineCap = "butt";
+    this.ctx.lineJoin="round";
+    this.ctx.lineWidth = this.branchWidth;
+    this.ctx.moveTo(x,y);
+    this.ctx.lineTo(toX,toY);
+    this.ctx.closePath();
+    this.ctx.stroke();
+    this.ctx.restore();
+    depth--;
+    if(depth>0){
+      this.drawBranch(toX,toY,branchLen*this.branchLenFactor,branchWidth-1,this.branchAngle,depth);
+      this.drawBranch(toX,toY,branchLen*this.branchLenFactor,branchWidth-1,-this.branchAngle,depth);
+    }
+  }
+```
+
+增加循环函数，在循环函数中重绘整个树，并且每次重绘都要修改branchAngle值，使大树摇动起来。这里使用```Math.sin(time/1000)```可以在1秒值内获得一个-1至1之间的变化值。```atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;```乘以系数并加在原角度上。
+
+
+```javascript
+function loop(time){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;
+    atree.drawRoot()
+    requestAnimFrame(loop);
+  }
+  loop(0);
+```
+
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/5.gif)    

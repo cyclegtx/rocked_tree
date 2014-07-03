@@ -43,10 +43,14 @@
         this.branchLenFactor = 0.8;
         this.rootLenFactor = 1.2;
         this.branchAngle = 20;
+        this.oBranchAngle = this.branchAngle;
+        this.branchAngleFactor = 5;
+        this.depth = depth || 5;
         var depth = depth || 5;
-        this.drawRoot(this.x,this.y,this.branchLen,this.branchWidth,depth);
+        this.drawRoot();
       }
-      Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth,depth){
+      Tree.prototype.drawRoot = function(){
+        var x = this.x,y=this.y,branchLen = this.branchLen,depth = this.depth,branchWidth = this.branchWidth;
         var toX = x;
         var toY = y-branchLen*this.rootLenFactor;
         var depth = depth||5;
@@ -55,7 +59,7 @@
         this.ctx.beginPath();
         this.ctx.lineCap = "butt";
         this.ctx.lineJoin="round";
-        this.ctx.lineWidth = branchWidth;
+        this.ctx.lineWidth = this.branchWidth;
         this.ctx.moveTo(x,y);
         this.ctx.lineTo(toX,toY);
         this.ctx.closePath();
@@ -90,7 +94,13 @@
         }
       }
       var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
-
+      function loop(time){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        atree.branchAngle = Math.sin(time/1000)*atree.branchAngleFactor+atree.oBranchAngle;
+        atree.drawRoot();
+        requestAnimFrame(loop);
+      }
+      loop(0);
     </script>
   </body>
 </html>
