@@ -41,24 +41,7 @@
         this.branchLen = branchLen||0;
         this.branchWidth = branchWidth||0;
         var depth = depth || 5;
-        this.drawBranch(this.x,this.y,this.branchLen,this.branchWidth);
       }
-      Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth){
-        var toX = x;
-        var toY = y-branchLen;
-        this.ctx.save();
-        this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
-        this.ctx.beginPath();
-        this.ctx.lineCap = "butt";
-        this.ctx.lineJoin="round";
-        this.ctx.lineWidth = branchWidth;
-        this.ctx.moveTo(x,y);
-        this.ctx.lineTo(toX,toY);
-        this.ctx.closePath();
-        this.ctx.stroke();
-        this.ctx.restore();
-      }
-      var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
     </script>
   </body>
 </html>
