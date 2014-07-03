@@ -170,22 +170,20 @@ Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle,depth){
 由于树之间角度过大，而且所有树枝长度都相等，看起来并不像一棵树。所以我们需要在Tree的构造函数中加入几个参数用来调整树的姿态。   
 ```javasript
 function Tree(x,y,branchLen,branchWidth,depth,canvas){
-    this.canvas = canvas || document.getElementById('canvas');
-    this.ctx = this.canvas.getContext('2d');
-    var x = x||0;
-    var y = y||0;
-    var branchLen = branchLen||0;
-    var branchWidth = branchWidth||0;
+    ......
     this.branchLenFactor = 0.8;
     this.rootLenFactor = 1.2;
     this.branchAngle = 20;
-    var depth = depth || 5;
-    this.drawRoot(x,y,branchLen,branchWidth,depth);
+    ......
 }
 ```  
+
+
 ```branchLenFactor```:画每一层树枝的时候乘在branchLen上面，用来控制树枝长度。
 ```rootLenFactor```:画树根的时候乘在branchLen上面，用来控制树根长度。
 ```branchAngle```: 用来控制树枝之间的角度。   
+
+
 ```javascript
   Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth,depth){
     var toX = x;
@@ -232,4 +230,4 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
   }
 ```  
 运行代码：  
-![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/4-2.jpg)  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/4-2.jpg)    

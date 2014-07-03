@@ -36,15 +36,15 @@
       function Tree(x,y,branchLen,branchWidth,depth,canvas){
         this.canvas = canvas || document.getElementById('canvas');
         this.ctx = this.canvas.getContext('2d');
-        var x = x||0;
-        var y = y||0;
-        var branchLen = branchLen||0;
-        var branchWidth = branchWidth||0;
+        this.x = x||0;
+        this.y = y||0;
+        this.branchLen = branchLen||0;
+        this.branchWidth = branchWidth||0;
         this.branchLenFactor = 0.8;
         this.rootLenFactor = 1.2;
         this.branchAngle = 20;
         var depth = depth || 5;
-        this.drawRoot(x,y,branchLen,branchWidth,depth);
+        this.drawRoot(this.x,this.y,this.branchLen,this.branchWidth,depth);
       }
       Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth,depth){
         var toX = x;
@@ -90,6 +90,7 @@
         }
       }
       var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
+
     </script>
   </body>
 </html>
