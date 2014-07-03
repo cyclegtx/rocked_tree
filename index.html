@@ -1,0 +1,47 @@
+<html>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        background: #7ACFFA;
+      }
+      #canvas {
+        position: absolute;
+        top: 0; left: 0;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <canvas id="canvas" width="1" height="1"></canvas>
+
+    <script type='text/javascript'>
+      window.requestAnimFrame = (function(){
+          return  window.requestAnimationFrame       ||
+                  window.webkitRequestAnimationFrame ||
+                  window.mozRequestAnimationFrame    ||
+                  function( callback ){
+                    window.setTimeout(callback, 1000 / 60);
+                  };
+        })();
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      function Tree(x,y,branchLen,branchWidth,depth,canvas){
+        this.canvas = canvas || document.getElementById('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.x = x||0;
+        this.y = y||0;
+        this.branchLen = branchLen||0;
+        this.branchWidth = branchWidth||0;
+        var depth = depth || 5;
+      }
+    </script>
+  </body>
+</html>
