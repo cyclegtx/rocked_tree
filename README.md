@@ -420,6 +420,7 @@ document.addEventListener('touchend',function(e){
   atree.oStrengthY = atree.strengthY;
   ......
 });
+<<<<<<< HEAD
 ```   
 
 运行代码：  
@@ -428,3 +429,6 @@ document.addEventListener('touchend',function(e){
 
 ####Step7.使树干摇动并移至屏幕左边
 修改drawRoot使树干也可以晃动，并修改```var atree = new Tree(10,canvas.height,100,8,8,canvas);```
+=======
+```
+>>>>>>> parent of 488fc93... 缓动2
