@@ -46,8 +46,13 @@
         this.oBranchAngle = this.branchAngle;
         this.branchAngleFactor = 5;
         this.swingAngle = 0;
+        this.swingSwitch = true;
         this.depth = depth || 5;
         var depth = depth || 5;
+        this.strengthX = 0;
+        this.strengthY = 0;
+        this.strengthXFactor = 5;
+        this.strengthYFactor = 10;
         this.drawRoot();
       }
       Tree.prototype.drawRoot = function(){
@@ -74,9 +79,10 @@
       }
       Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle,depth){
         var angle = angle || 0;
+        angle += this.strengthX*(depth/this.depth)/this.strengthXFactor*this.branchAngle;
         var radian = (90-angle)*(Math.PI/180);
-        var toX = x+Math.cos(radian)*branchLen;
-        var toY = y-Math.sin(radian)*branchLen;
+        var toX = x+Math.cos(radian)*branchLen+this.strengthX*(1-depth/this.depth);
+        var toY = y-Math.sin(radian)*branchLen+this.strengthY*(1-depth/this.depth);
         this.ctx.save();
         this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
         this.ctx.beginPath();
@@ -97,13 +103,49 @@
       var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
       function loop(time){
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        atree.swingAngle++;
-        atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
+        if(atree.swingSwitch){
+          if(atree.strengthX >0){
+            atree.strengthX -= 1;
+          }
+          if(atree.strengthX <0){
+            atree.strengthX += 1;
+          }
+          if(atree.strengthY >0){
+            atree.strengthY -= 1;
+          }
+          if(atree.strengthY <0){
+            atree.strengthY += 1;
+          }
+          atree.swingAngle++;
+          atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
+        }
         atree.drawRoot();
         requestAnimFrame(loop);
       }
       loop(0);
       
+      //记录触控开始时的信息
+      var touchStart = {x:0,y:0,strengthX:0,strengthY:0};
+      document.addEventListener('touchstart',function(e){
+          //让树停止摆动
+          atree.swingSwitch = false;
+          touchStart.x = e.touches[0].clientX;
+          touchStart.y = e.touches[0].clientY;
+          //记录触控开始时,原strength的值
+          touchStart.strengthX = atree.strengthX;
+          touchStart.strengthY = atree.strengthY;
+      });
+      document.addEventListener('touchmove',function(e){
+          //阻止浏览器默认动作
+          e.preventDefault();
+          //(touchStart.x-e.touches[0].clientX)/canvas.width可以根据滑动距离获得一个0-1的值
+          atree.strengthX = touchStart.strengthX-(touchStart.x-e.touches[0].clientX)/canvas.width*atree.strengthXFactor;
+          atree.strengthY = touchStart.strengthY-(touchStart.y-e.touches[0].clientY)/canvas.height*atree.strengthYFactor;
+      });
+      document.addEventListener('touchend',function(e){
+          //恢复摆动
+          atree.swingSwitch = true;
+      });
     </script>
   </body>
 </html>

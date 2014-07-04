@@ -273,7 +273,7 @@ Tree.prototype.drawRoot = function(){
   }
 ```
 
-增加循环函数，在循环函数中重绘整个树，并且每次重绘都要修改branchAngle值，使大树摇动起来。```atree.swingAngle++;```使摇动角度随时间变化。这里使用```Math.sin(atree.swingAngle*(Math.PI/180))```可以在1秒值内获得一个-1至1之间的变化值。```atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;```乘以系数并加在原角度上。
+增加循环函数，在循环函数中重绘整个树，并且每次重绘都要修改branchAngle值，使大树摇动起来。```atree.swingAngle++;```使摇动角度随时间变化。这里使用```Math.sin(atree.swingAngle*(Math.PI/180))```可以获得一个-1至1之间的连续变化值。```atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;```乘以系数并加在原角度上。
 
 
 ```javascript
@@ -288,3 +288,95 @@ function loop(time){
 
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/5.gif)    
+<a href="https://github.com/cyclegtx/rocked_tree/tree/1fc535215e0fdc86f95329518d4de8aae73b8c61" target="_blank">点击查看历史代码</a>    
+
+
+####Step6.添加手势  
+这里为了省事只添加了touch事件，mouse事件与touch事件的处理方法大体一致。  
+首先为Tree新加一个属性```swingSwitch = true```用来表示大树是否摆动。当手指触控到屏幕的时候摆动停止，离开屏幕的时候摆动继续。  
+添加```strengthX```,```strengthY```两个属性;分别表示树在x轴与y轴因受到的力而移动的距离。  
+添加```strengthXFactor```,```strengthYFactor```；分别用来表示再一次滑动中x轴与y轴移动的最大距离。  
+
+
+
+
+```javascript
+function Tree(x,y,branchLen,branchWidth,depth,canvas){
+    ......
+    this.swingSwitch = true;
+    ......
+    this.strengthX = 0;
+    this.strengthY = 0;
+    ......
+  }
+```  
+```javascript
+//记录触控开始时的信息
+var touchStart = {x:0,y:0,strengthX:0,strengthY:0};
+document.addEventListener('touchstart',function(e){
+    //让树停止摆动
+    atree.swingSwitch = false;
+    touchStart.x = e.touches[0].clientX;
+    touchStart.y = e.touches[0].clientY;
+    //记录触控开始时,原strength的值
+    touchStart.strengthX = atree.strengthX;
+    touchStart.strengthY = atree.strengthY;
+});
+document.addEventListener('touchmove',function(e){
+    //阻止浏览器默认动作
+    e.preventDefault();
+    //(touchStart.x-e.touches[0].clientX)/canvas.width可以根据滑动距离获得一个0-1的值
+    atree.strengthX = touchStart.strengthX-(touchStart.x-e.touches[0].clientX)/canvas.width*atree.strengthXFactor;
+    atree.strengthY = touchStart.strengthY-(touchStart.y-e.touches[0].clientY)/canvas.height*atree.strengthYFactor;
+});
+document.addEventListener('touchend',function(e){
+    //恢复摆动
+    atree.swingSwitch = true;
+});
+```  
+
+修改drawBranch将strength的变化添加到角度与toX，toY的计算中，详情见注释。
+
+```javascript
+Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle,depth){
+    
+    var angle = angle || 0;
+    //用strengthX乘以(depth/this.depth)使得树枝末梢对角度的变化不敏感
+    angle += this.strengthX*(depth/this.depth)/this.strengthXFactor*this.branchAngle;
+    var radian = (90-angle)*(Math.PI/180);
+    //用strengthX乘以(1-depth/this.depth)使得树枝末梢对角度的变化敏感
+    var toX = x+Math.cos(radian)*branchLen+this.strengthX*(1-depth/this.depth);
+    var toY = y-Math.sin(radian)*branchLen+this.strengthY*(1-depth/this.depth);
+    ......
+}
+```
+
+在动画循环中添加恢复代码，使strengthX，strengthY恢复为0，并增加swingSwitch的判断。
+```javascript
+function loop(time){
+    ......
+    //当swingSwitch开启时开始摆动
+    if(atree.swingSwitch){
+        //将strength恢复到0
+      if(atree.strengthX >0){
+        atree.strengthX -= 1;
+      }
+      if(atree.strengthX <0){
+        atree.strengthX += 1;
+      }
+      if(atree.strengthY >0){
+        atree.strengthY -= 1;
+      }
+      if(atree.strengthY <0){
+        atree.strengthY += 1;
+      }
+      atree.swingAngle++;
+      atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
+    }
+    ......
+}
+loop(0);
+```
+
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/6.gif)    
