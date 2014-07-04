@@ -8,13 +8,13 @@
 完成HTML页面后新建一个Tree类用来记录树的各个属性。其中```x,y```为树根部的坐标值，```branchLen,branchWidth```分别是树枝的长度与宽度，```depth```为树枝的层数，```canvas```用来接页面中的canvas元素（默认是ID为canvas的元素）。
 ```javascript
 function Tree(x,y,branchLen,branchWidth,depth,canvas){
-	this.canvas = canvas || document.getElementById('canvas');
-	this.ctx = this.canvas.getContext('2d');
-	this.x = x||0;
-	this.y = y||0;
-	this.branchLen = branchLen||0;
-	this.branchWidth = branchWidth||0;
-	var depth = depth || 5;
+    this.canvas = canvas || document.getElementById('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.x = x||0;
+    this.y = y||0;
+    this.branchLen = branchLen||0;
+    this.branchWidth = branchWidth||0;
+    var depth = depth || 5;
 }
 ```
 <a href="https://github.com/cyclegtx/rocked_tree/tree/9cd00a685bd310b6824b1f006822b590b315ed5f" target="_blank">点击查看历史代码</a>
@@ -26,29 +26,29 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
 在drawRoot中我们需要用```lineTo()```画出树枝。树枝的起始的坐标值```(x,y)```已经给出，结束的坐标值```(toX,toY)```需要进行计算。第一个画的是树干，由于树干垂直于地面所以结束坐标```toX```等于初始坐标```x```,而结束坐标```toY```等于初始```y```减去树干长度```branchLen```(注意坐标的0,0点在canvas的左上角)。```var toX = x;var toY = y-branchLen;```
 ```javascript
 function Tree(x,y,branchLen,branchWidth,depth,canvas){
-	this.canvas = canvas || document.getElementById('canvas');
-	this.ctx = this.canvas.getContext('2d');
-	this.x = x||0;
-	this.y = y||0;
-	this.branchLen = branchLen||0;
-	this.branchWidth = branchWidth||0;
-	var depth = depth || 5;
-	this.drawRoot(this.x,this.y,this.branchLen,this.branchWidth);
+    this.canvas = canvas || document.getElementById('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.x = x||0;
+    this.y = y||0;
+    this.branchLen = branchLen||0;
+    this.branchWidth = branchWidth||0;
+    var depth = depth || 5;
+    this.drawRoot(this.x,this.y,this.branchLen,this.branchWidth);
 }
 Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth){
-	var toX = x;
-	var toY = y-branchLen;
-	this.ctx.save();
-	this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
-	this.ctx.beginPath();
-	this.ctx.lineCap = "butt";
-	this.ctx.lineJoin="round";
-	this.ctx.lineWidth = branchWidth;
-	this.ctx.moveTo(x,y);
-	this.ctx.lineTo(toX,toY);
-	this.ctx.closePath();
-	this.ctx.stroke();
-	this.ctx.restore();
+    var toX = x;
+    var toY = y-branchLen;
+    this.ctx.save();
+    this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+    this.ctx.beginPath();
+    this.ctx.lineCap = "butt";
+    this.ctx.lineJoin="round";
+    this.ctx.lineWidth = branchWidth;
+    this.ctx.moveTo(x,y);
+    this.ctx.lineTo(toX,toY);
+    this.ctx.closePath();
+    this.ctx.stroke();
+    this.ctx.restore();
 }
 var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
 ```
@@ -63,38 +63,38 @@ drawBranch同样是根据初始与结束坐标画出一条直线代表树枝。�
 
 ```javascript
 Tree.prototype.drawRoot = function(x,y,branchLen,branchWidth){
-	var toX = x;
-	var toY = y-branchLen;
-	this.ctx.save();
-	this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
-	this.ctx.beginPath();
-	this.ctx.lineCap = "butt";
-	this.ctx.lineJoin="round";
-	this.ctx.lineWidth = branchWidth;
-	this.ctx.moveTo(x,y);
-	this.ctx.lineTo(toX,toY);
-	this.ctx.closePath();
-	this.ctx.stroke();
-	this.ctx.restore();
-	this.drawBranch(toX,toY,branchLen,branchWidth-1,30);
-	this.drawBranch(toX,toY,branchLen,branchWidth-1,-30);
+    var toX = x;
+    var toY = y-branchLen;
+    this.ctx.save();
+    this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+    this.ctx.beginPath();
+    this.ctx.lineCap = "butt";
+    this.ctx.lineJoin="round";
+    this.ctx.lineWidth = branchWidth;
+    this.ctx.moveTo(x,y);
+    this.ctx.lineTo(toX,toY);
+    this.ctx.closePath();
+    this.ctx.stroke();
+    this.ctx.restore();
+    this.drawBranch(toX,toY,branchLen,branchWidth-1,30);
+    this.drawBranch(toX,toY,branchLen,branchWidth-1,-30);
 }
 Tree.prototype.drawBranch = function(x,y,branchLen,branchWidth,angle){
-	var angle = angle || 0;
-	var radian = (90-angle)*(Math.PI/180);
-	var toX = x+Math.cos(radian)*branchLen;
-	var toY = y-Math.sin(radian)*branchLen;
-	this.ctx.save();
-	this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
-	this.ctx.beginPath();
-	this.ctx.lineCap = "butt";
-	this.ctx.lineJoin="round";
-	this.ctx.lineWidth = branchWidth;
-	this.ctx.moveTo(x,y);
-	this.ctx.lineTo(toX,toY);
-	this.ctx.closePath();
-	this.ctx.stroke();
-	this.ctx.restore();
+    var angle = angle || 0;
+    var radian = (90-angle)*(Math.PI/180);
+    var toX = x+Math.cos(radian)*branchLen;
+    var toY = y-Math.sin(radian)*branchLen;
+    this.ctx.save();
+    this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
+    this.ctx.beginPath();
+    this.ctx.lineCap = "butt";
+    this.ctx.lineJoin="round";
+    this.ctx.lineWidth = branchWidth;
+    this.ctx.moveTo(x,y);
+    this.ctx.lineTo(toX,toY);
+    this.ctx.closePath();
+    this.ctx.stroke();
+    this.ctx.restore();
 }
 ```
 
@@ -240,13 +240,13 @@ branchAngle: 用来控制树枝之间的角度。
 
 ```javascript
 function Tree(x,y,branchLen,branchWidth,depth,canvas){
-	......
-	this.branchAngle = 20;
-	this.oBranchAngle = this.branchAngle;
-	this.branchAngleFactor = 5;
-	this.swingAngle = 0;
-	......
-	this.drawRoot();
+    ......
+    this.branchAngle = 20;
+    this.oBranchAngle = this.branchAngle;
+    this.branchAngleFactor = 5;
+    this.swingAngle = 0;
+    ......
+    this.drawRoot();
 }
 
 Tree.prototype.drawRoot = function(){
@@ -395,21 +395,37 @@ function Tree(x,y,branchLen,branchWidth,depth,canvas){
 function loop(time){
     ......
     if(atree.swingSwitch){
-      if(atree.strengthX != 0){
+      if(atree.strengthX > 0){
         if(atree.recoverStartTime == 0){
           atree.recoverStartTime = time;
         }
         var t = time-atree.recoverStartTime;
         //五次方的缓动
-        atree.strengthX =  atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0;
+        atree.strengthX =  Math.max(atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
       }
-      if(atree.strengthY != 0){
+      if(atree.strengthX < 0){
         if(atree.recoverStartTime == 0){
           atree.recoverStartTime = time;
         }
         var t = time-atree.recoverStartTime;
         //五次方的缓动
-        atree.strengthY =  atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0;
+        atree.strengthX =  Math.min(atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      if(atree.strengthY > 0){
+        if(atree.recoverStartTime == 0){
+          atree.recoverStartTime = time;
+        }
+        var t = time-atree.recoverStartTime;
+        //五次方的缓动
+        atree.strengthY =  Math.max(atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      if(atree.strengthY < 0){
+        if(atree.recoverStartTime == 0){
+          atree.recoverStartTime = time;
+        }
+        var t = time-atree.recoverStartTime;
+        //五次方的缓动
+        atree.strengthY =  Math.min(atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
       }
     }
     ......
@@ -420,15 +436,7 @@ document.addEventListener('touchend',function(e){
   atree.oStrengthY = atree.strengthY;
   ......
 });
-<<<<<<< HEAD
 ```   
 
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/7.gif)    
-<a href="https://github.com/cyclegtx/rocked_tree/tree/488fc9347c1b79b4e28ea7761da2898c53fd929c" target="_blank">点击查看历史代码</a>  
-
-####Step7.使树干摇动并移至屏幕左边
-修改drawRoot使树干也可以晃动，并修改```var atree = new Tree(10,canvas.height,100,8,8,canvas);```
-=======
-```
->>>>>>> parent of 488fc93... 缓动2

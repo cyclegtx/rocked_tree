@@ -58,13 +58,8 @@
       }
       Tree.prototype.drawRoot = function(){
         var x = this.x,y=this.y,branchLen = this.branchLen,depth = this.depth,branchWidth = this.branchWidth;
-        //增加strength
-        var angle = 0;
-        angle += this.strengthX/this.strengthXFactor*this.branchAngle;
-        var radian = (90-angle)*(Math.PI/180);
-        var toX = x+Math.cos(radian)*branchLen*this.rootLenFactor+this.strengthX;
-        var toY = y-Math.sin(radian)*branchLen*this.rootLenFactor+this.strengthY;
-
+        var toX = x;
+        var toY = y-branchLen*this.rootLenFactor;
         var depth = depth||5;
         this.ctx.save();
         this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
@@ -106,7 +101,7 @@
           this.drawBranch(toX,toY,branchLen*this.branchLenFactor,branchWidth-1,angle-this.branchAngle,depth);
         }
       }
-      var atree = new Tree(10,canvas.height,100,8,8,canvas);
+      var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
       function loop(time){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if(atree.swingSwitch){
