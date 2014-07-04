@@ -53,6 +53,7 @@
         this.strengthY = 0;
         this.strengthXFactor = 5;
         this.strengthYFactor = 10;
+        this.recoverStartTime = 0;
         this.drawRoot();
       }
       Tree.prototype.drawRoot = function(){
@@ -104,17 +105,19 @@
       function loop(time){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if(atree.swingSwitch){
-          if(atree.strengthX >0){
-            atree.strengthX -= 1;
+          if(atree.strengthX != 0){
+            if(atree.recoverStartTime == 0){
+              atree.recoverStartTime = time;
+            }
+            var t = time-atree.recoverStartTime;
+            atree.strengthX =  atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0;
           }
-          if(atree.strengthX <0){
-            atree.strengthX += 1;
-          }
-          if(atree.strengthY >0){
-            atree.strengthY -= 1;
-          }
-          if(atree.strengthY <0){
-            atree.strengthY += 1;
+          if(atree.strengthY != 0){
+            if(atree.recoverStartTime == 0){
+              atree.recoverStartTime = time;
+            }
+            var t = time-atree.recoverStartTime;
+            atree.strengthY =  atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0;
           }
           atree.swingAngle++;
           atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;
@@ -144,6 +147,9 @@
       });
       document.addEventListener('touchend',function(e){
           //恢复摆动
+          atree.recoverStartTime = 0;
+          atree.oStrengthX = atree.strengthX;
+          atree.oStrengthY = atree.strengthY;
           atree.swingSwitch = true;
       });
     </script>

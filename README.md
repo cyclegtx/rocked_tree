@@ -1,6 +1,6 @@
 用Canvas制作可以根据手势摆动的树
 ===========
-根据工作的需要，制作一个摆动的树做为页面的背景。为了增加页面的交互性，我又为背景中的树增加了鼠标（触控）事件，使他能够根据鼠标（触控）做出相应的动作，当手指做上下或者左右滑动的时候树会跟着摆动。先看看最终效果。
+根据工作的需要，制作一个摆动的树做为页面的背景。为了增加页面的交互性，我又为背景中的树增加了鼠标（触控）事件，使他能够根据鼠标（触控）做出相应的动作，当手指做上下或者左右滑动的时候树会跟着摆动。先看看最终效果。  
 ![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
 
 ####Step1.完成HTML页面，新建一个Tree类  
@@ -380,3 +380,44 @@ loop(0);
 
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/6.gif)    
+<a href="https://github.com/cyclegtx/rocked_tree/tree/fc396c3490ad873c061145baed773ad83057e1b5" target="_blank">点击查看历史代码</a>  
+
+####Step7.添加缓动效果  
+Step6中的恢复strengthX,strengthY的代码过于简单，动画匀速恢复到0，显得过于突兀。比较真实的情况应该是由快变慢的恢复，所以我们要为恢复代码加上缓动。首先在Tree中添加```recoverStartTime = 0```用来记录恢复开始的时间，在手指离开屏幕的时候(touchend)将其赋为0，同时用```oStrengthX```,```oStrengthY```记录下来strengthX与strengthY的目标值。
+
+
+```javascript
+function Tree(x,y,branchLen,branchWidth,depth,canvas){
+    ......
+    this.recoverStartTime = 0;
+    ......
+}
+function loop(time){
+    ......
+    if(atree.swingSwitch){
+      if(atree.strengthX != 0){
+        if(atree.recoverStartTime == 0){
+          atree.recoverStartTime = time;
+        }
+        var t = time-atree.recoverStartTime;
+        //五次方的缓动
+        atree.strengthX =  atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0;
+      }
+      if(atree.strengthY != 0){
+        if(atree.recoverStartTime == 0){
+          atree.recoverStartTime = time;
+        }
+        var t = time-atree.recoverStartTime;
+        //五次方的缓动
+        atree.strengthY =  atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0;
+      }
+    }
+    ......
+}
+document.addEventListener('touchend',function(e){
+  atree.recoverStartTime = 0;
+  atree.oStrengthX = atree.strengthX;
+  atree.oStrengthY = atree.strengthY;
+  ......
+});
+```
