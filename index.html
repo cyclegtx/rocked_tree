@@ -58,8 +58,13 @@
       }
       Tree.prototype.drawRoot = function(){
         var x = this.x,y=this.y,branchLen = this.branchLen,depth = this.depth,branchWidth = this.branchWidth;
-        var toX = x;
-        var toY = y-branchLen*this.rootLenFactor;
+        //增加strength
+        var angle = 0;
+        angle += this.strengthX/this.strengthXFactor*this.branchAngle;
+        var radian = (90-angle)*(Math.PI/180);
+        var toX = x+Math.cos(radian)*branchLen*this.rootLenFactor+this.strengthX;
+        var toY = y-Math.sin(radian)*branchLen*this.rootLenFactor+this.strengthY;
+
         var depth = depth||5;
         this.ctx.save();
         this.ctx.strokeStyle="rgba(37, 141, 194, 0.93)";
@@ -101,23 +106,37 @@
           this.drawBranch(toX,toY,branchLen*this.branchLenFactor,branchWidth-1,angle-this.branchAngle,depth);
         }
       }
-      var atree = new Tree(canvas.width/2-4,canvas.height,100,8,8,canvas);
+      var atree = new Tree(10,canvas.height,100,8,8,canvas);
       function loop(time){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if(atree.swingSwitch){
-          if(atree.strengthX != 0){
+          if(atree.strengthX > 0){
             if(atree.recoverStartTime == 0){
               atree.recoverStartTime = time;
             }
             var t = time-atree.recoverStartTime;
-            atree.strengthX =  atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0;
+            atree.strengthX =  Math.max(atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
           }
-          if(atree.strengthY != 0){
+          if(atree.strengthX < 0){
             if(atree.recoverStartTime == 0){
               atree.recoverStartTime = time;
             }
             var t = time-atree.recoverStartTime;
-            atree.strengthY =  atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0;
+            atree.strengthX =  Math.min(atree.oStrengthX-atree.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+          }
+          if(atree.strengthY > 0){
+            if(atree.recoverStartTime == 0){
+              atree.recoverStartTime = time;
+            }
+            var t = time-atree.recoverStartTime;
+            atree.strengthY =  Math.max(atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+          }
+          if(atree.strengthY < 0){
+            if(atree.recoverStartTime == 0){
+              atree.recoverStartTime = time;
+            }
+            var t = time-atree.recoverStartTime;
+            atree.strengthY =  Math.min(atree.oStrengthY-atree.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
           }
           atree.swingAngle++;
           atree.branchAngle = Math.sin(atree.swingAngle*(Math.PI/180))*atree.branchAngleFactor+atree.oBranchAngle;

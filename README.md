@@ -424,3 +424,7 @@ document.addEventListener('touchend',function(e){
 
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/7.gif)    
+<a href="https://github.com/cyclegtx/rocked_tree/tree/488fc9347c1b79b4e28ea7761da2898c53fd929c" target="_blank">点击查看历史代码</a>  
+
+####Step7.使树干摇动并移至屏幕左边
+修改drawRoot使树干也可以晃动，并修改```var atree = new Tree(10,canvas.height,100,8,8,canvas);```
