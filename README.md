@@ -420,4 +420,7 @@ document.addEventListener('touchend',function(e){
   atree.oStrengthY = atree.strengthY;
   ......
 });
-```
+```   
+
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/7.gif)    
