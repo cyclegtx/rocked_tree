@@ -439,4 +439,76 @@ document.addEventListener('touchend',function(e){
 ```   
 
 运行代码：  
-![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/7.gif)    
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/7.gif)
+<a href="https://github.com/cyclegtx/rocked_tree/tree/ed015c82fe1dd310058bf07a1ea98314583c73a7" target="_blank">点击查看历史代码</a>      
+
+
+####Step7.使树干摇动并移至屏幕左边
+修改drawRoot使树干也可以晃动，并修改```var atree = new Tree(10,canvas.height,100,8,8,canvas);```使其移至左边。
+
+
+```javascript
+Tree.prototype.drawRoot = function(){
+    ......
+    //增加strength
+    var angle = 0;
+    angle += this.strengthX/this.strengthXFactor*this.branchAngle;
+    var radian = (90-angle)*(Math.PI/180);
+    var toX = x+Math.cos(radian)*branchLen*this.rootLenFactor;
+    var toY = y-Math.sin(radian)*branchLen*this.rootLenFactor;
+    ......
+}
+var atree = new Tree(10,canvas.height,100,8,8,canvas);
+```
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
+<a href="https://github.com/cyclegtx/rocked_tree/tree/ed015c82fe1dd310058bf07a1ea98314583c73a7" target="_blank">点击查看历史代码</a>     
+
+####Step8.   
+将动画循环中处理角度的部分添加到Tree的swing()中。   
+```javascript
+Tree.prototype.swing = function(time){
+    this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+    if(this.swingSwitch){
+      if(this.strengthX > 0){
+        if(this.recoverStartTime == 0){
+          this.recoverStartTime = time;
+        }
+        var t = time-this.recoverStartTime;
+        this.strengthX =  Math.max(this.oStrengthX-this.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      if(this.strengthX < 0){
+        if(this.recoverStartTime == 0){
+          this.recoverStartTime = time;
+        }
+        var t = time-this.recoverStartTime;
+        this.strengthX =  Math.min(this.oStrengthX-this.oStrengthX*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      if(this.strengthY > 0){
+        if(this.recoverStartTime == 0){
+          this.recoverStartTime = time;
+        }
+        var t = time-this.recoverStartTime;
+        this.strengthY =  Math.max(this.oStrengthY-this.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      if(this.strengthY < 0){
+        if(this.recoverStartTime == 0){
+          this.recoverStartTime = time;
+        }
+        var t = time-this.recoverStartTime;
+        this.strengthY =  Math.min(this.oStrengthY-this.oStrengthY*((t=t/2000-1)*t*t*t*t + 1)+0,0);
+      }
+      this.swingAngle++;
+      this.branchAngle = Math.sin(this.swingAngle*(Math.PI/180))*this.branchAngleFactor+this.oBranchAngle;
+    }
+    this.drawRoot();
+}
+var atree = new Tree(10,canvas.height,100,8,8,canvas);
+function loop(time){
+    atree.swing(time);
+    requestAnimFrame(loop);
+}
+loop(0);
+```
+运行代码：  
+![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
