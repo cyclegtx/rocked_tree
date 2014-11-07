@@ -515,4 +515,4 @@ loop(0);
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
 
 
-![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)  
+更多教程请访问：[ued.sexy](http://ued.sexy)  
