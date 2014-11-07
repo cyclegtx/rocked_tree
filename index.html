@@ -30,10 +30,10 @@
         })();
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth*2;
-      canvas.height = window.innerHeight*2;
-      document.getElementById('canvas').style.width = window.innerWidth+'px';
-      document.getElementById('canvas').style.height = window.innerHeight+'px';
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+     /* document.getElementById('canvas').style.width = window.innerWidth+'px';
+      document.getElementById('canvas').style.height = window.innerHeight+'px';*/
       
       function Tree(x,y,branchLen,branchWidth,depth,canvas){
         this.canvas = canvas || document.getElementById('canvas');
@@ -144,7 +144,7 @@
         }
         this.drawRoot();
       }
-      var atree = new Tree(10,canvas.height,200,11,8,canvas);
+      var atree = new Tree(10,canvas.height,100,8,8,canvas);
       function loop(time){
         atree.swing(time);
         requestAnimFrame(loop);

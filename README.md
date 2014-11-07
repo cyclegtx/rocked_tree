@@ -1,7 +1,8 @@
 用Canvas制作可以根据手势摆动的树
-===========
-根据工作的需要，制作一个摆动的树做为页面的背景。为了增加页面的交互性，我又为背景中的树增加了鼠标（触控）事件，使他能够根据鼠标（触控）做出相应的动作，当手指做上下或者左右滑动的时候树会跟着摆动。先看看最终效果。  
-![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
+===========  
+![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)  
+根据工作的需要，制作一个摆动的树做为页面的背景。为了增加页面的交互性，我又为背景中的树增加了鼠标（触控）事件，使他能够根据鼠标（触控）做出相应的动作，当手指做上下或者左右滑动的时候树会跟着摆动。  
+
 
 ####Step1.完成HTML页面，新建一个Tree类  
 
@@ -512,3 +513,6 @@ loop(0);
 ```
 运行代码：  
 ![效果图](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)
+
+
+![最终效果](https://raw.githubusercontent.com/cyclegtx/rocked_tree/master/images/1.gif)  
